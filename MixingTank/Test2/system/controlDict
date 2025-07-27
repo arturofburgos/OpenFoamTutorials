@@ -56,7 +56,7 @@ libs
     "libfieldFunctionObjects.so"    // add only if it is not already listed
 );
 
-functions
+/*functions
 {
     gasHoldup                       // folder name: postProcessing/gasHoldup/
     {
@@ -89,6 +89,35 @@ functions
         // region region0;          // omit if case has only one region
         //libs ("libfieldFunctionObjects.so"); // OPTIONAL duplicate safety
     }
+}*/
+
+
+functions
+{
+    /*───────────────────────────────────────────────────────────────────────*\
+      1.  Four‑point probe:  α_air at the spargers
+    \*───────────────────────────────────────────────────────────────────────*/
+    spargerGasProbes
+    {
+        type            probes;
+        libs            (sampling);
+
+        /* ── How often to write probe data ────────────────────────────── */
+        writeControl    timeStep;      // every solver step
+        writeInterval   1;             // change to N for every N‑th step
+
+        /* ── Where and what to sample ─────────────────────────────────── */
+        interpolationScheme  cellPoint;   // robust for off‑cell centres
+        probeLocations
+        (
+            (-0.02 -0.125 -0.02)   // Probe 1
+            ( 0.00 -0.125 -0.02)   // Probe 2
+            ( 0.02 -0.125 -0.02)   // Probe 3
+            ( 0.00 -0.125  0.02)   // Probe 4
+        );
+        fields          (alpha.air);      // add U, p_rgh … if desired
+    }
+
 }
 
 // ************************************************************************* //
